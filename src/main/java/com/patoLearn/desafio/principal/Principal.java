@@ -1,8 +1,11 @@
 package com.patoLearn.desafio.principal;
 
 import com.patoLearn.desafio.model.Datos;
+import com.patoLearn.desafio.model.DatosLibros;
 import com.patoLearn.desafio.service.ConsumoApi;
 import com.patoLearn.desafio.service.ConvierteDatos;
+
+import java.util.Comparator;
 
 public class Principal {
     private static final String URL_BASE = "https://gutendex.com/books/";
@@ -14,6 +17,13 @@ public class Principal {
         System.out.println(json);
 
         Datos datos = conversor.obtenerDatos(json, Datos.class);
-        System.out.println(datos);
+
+        // Top 10 libros más descargados
+        System.out.println("Top 10 libros más descargados");
+        datos.resultados().stream()
+                .sorted(Comparator.comparing(DatosLibros::numeroDescargas).reversed())
+                .limit(10)
+                .map(l -> l.titulo().toUpperCase())
+                .forEach(System.out::println);
     }
 }
