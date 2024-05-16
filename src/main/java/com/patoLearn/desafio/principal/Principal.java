@@ -6,8 +6,10 @@ import com.patoLearn.desafio.service.ConsumoApi;
 import com.patoLearn.desafio.service.ConvierteDatos;
 
 import java.util.Comparator;
+import java.util.DoubleSummaryStatistics;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Principal {
     private Scanner teclado = new Scanner(System.in);
@@ -43,5 +45,15 @@ public class Principal {
         } else {
             System.out.println("Libro no encontrado");
         }
+
+        // Estadisticas
+        DoubleSummaryStatistics est = datos.resultados().stream()
+                .filter(d -> d.numeroDescargas() > 0)
+                .collect(Collectors.summarizingDouble(DatosLibros::numeroDescargas));
+
+        System.out.println("Cantidad media de descargas: " + est.getAverage());
+        System.out.println("Cantidad máxima de descargas: " + est.getMax());
+        System.out.println("Cantidad minima de descargas: " + est.getMin());
+        System.out.println("Cantidad de registros evaluados para calcular las estadisticas: " + est.getCount());
     }
 }
